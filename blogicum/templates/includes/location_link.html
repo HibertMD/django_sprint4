@@ -1,0 +1,9 @@
+{% if post.location and post.location.is_published %}
+  <a class="text-muted" href="{% url 'blog:location_posts' post.location.name %}">
+    {{ post.location.name }}
+  </a>
+  {% else %}
+    <a class="text-muted" href="{% url 'blog:location_posts' 'Планета_Земля' %}">
+      Планета Земля
+    </a>
+{% endif %}

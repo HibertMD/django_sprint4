@@ -47,7 +47,7 @@ def test_csrf_failure_view():
 def test_custom_err_handlers(client, user_client):
     err_pages_vs_file_names = {
         404: "404.html",
-        403: "403csrf.html",
+        403: "403_csrf.html",
         500: "500.html",
     }
     for status, fname in err_pages_vs_file_names.items():

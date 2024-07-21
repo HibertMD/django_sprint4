@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block title %}Ошибка доступа{% endblock %}
+{% block content %}
+  <h1>Ошибка доступа</h1>
+  <p>Недостаточно прав доступа</p>
+  <a href="{% url 'blog:index' %}">Вернуться на главную</a>
+{% endblock %}

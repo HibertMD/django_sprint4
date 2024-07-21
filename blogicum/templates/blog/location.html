@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}
+  Публикации из локации «{{ location.name }}»
+{% endblock %}
+{% block content %}
+<h1>Публикации из локации «{{ location.name }}»</h1>
+{% for post in posts_list %}
+  <article class="mb-5">
+    {% include "includes/post_card.html" %}
+  </article>
+{% endfor %}
+
+{% endblock %}
