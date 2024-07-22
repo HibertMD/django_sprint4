@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, \
@@ -76,8 +77,8 @@ class PostDeleteView(OnlyAuthorMixin, DeleteView):
 
 class CategoryPostsListView(ListView):
     model = Category
-    slug_url_kwarg = "category_slug"
-    slug_field = "category_slug"
+    slug_url_kwarg = 'category_slug'
+    slug_field = 'category_slug'
     template_name = 'blog/category.html'
     paginate_by = POSTS_PER_PAGE
 
