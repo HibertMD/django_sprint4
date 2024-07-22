@@ -29,7 +29,7 @@ class UserCreateView(UserRedirectMixin, CreateView):
 
 
 class UserProfileView(UserProfileMixin, ListView):
-    template_name = 'users/profile.html'
+    template_name = 'blog/profile.html'
     paginate_by = POSTS_PER_PAGE
 
     def get_context_data(self, **kwargs):
@@ -45,5 +45,5 @@ class UserProfileView(UserProfileMixin, ListView):
 
 
 class UserProfileUpdate(UserProfileMixin, UserRedirectMixin, UpdateView):
-    template_name = 'users/user.html'
+    template_name = 'blog/user.html'
     form_class = ProfileForm

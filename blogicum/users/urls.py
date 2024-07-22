@@ -9,5 +9,9 @@ urlpatterns = [
         '<slug:username>/',
         views.UserProfileView.as_view(),
         name='profile'),
-    path('<slug:username>/edit_profile/', views.UserProfileUpdate.as_view(), name='edit_profile'),
+    path(
+        '<slug:username>/edit_profile/',
+        views.UserProfileUpdate.as_view(),
+        name='edit_profile',
+    )
 ]

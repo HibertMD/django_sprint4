@@ -12,16 +12,16 @@ handler500 = 'core.views.internal_server'
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('posts/', include('blog.urls', namespace='blog')),
     path('', include('blog.urls', namespace='blog')),
-    path('posts/', include('blog.urls', namespace='blog_posts')),
     path('pages/', include('pages.urls', namespace='pages')),
     path(
         'auth/registration/',
         views.UserCreateView.as_view(),
         name='registration'
     ),
-    path('profile/', include('users.urls')),
     path('auth/', include('django.contrib.auth.urls')),
+    path('profile/', include('users.urls')),
 ]
 
 if settings.DEBUG:

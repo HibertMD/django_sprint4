@@ -8,7 +8,7 @@ urlpatterns = [
     path('', views.PostListView.as_view(),
          name='index'
          ),
-    path('posts/<int:pk>/',
+    path('<int:pk>/',
          views.PostDetailView.as_view(),
          name='post_detail'
          ),
@@ -23,6 +23,18 @@ urlpatterns = [
     path('<int:pk>/delete/',
          views.PostDeleteView.as_view(),
          name='delete_post'
+         ),
+    path('<int:pk>/comment/',
+         views.CommentCreateView.as_view(),
+         name='add_comment'
+         ),
+    path('<int:post_id>/edit_comment/<int:comment_id>/',
+         views.CommentUpdateView.as_view(),
+         name='edit_comment'
+         ),
+    path('<int:post_id>/delete_comment/<int:comment_id>/',
+         views.CommentDeleteView.as_view(),
+         name='delete_comment'
          ),
     path('category/<slug:category_slug>/',
          views.PostListView.as_view(),
