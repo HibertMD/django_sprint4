@@ -1,5 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.db.models import Count
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, ListView
@@ -10,6 +12,13 @@ from blog.constants import POSTS_PER_PAGE
 User = get_user_model()
 
 
+class OnlyAuthorMixin(UserPassesTestMixin):
+
+    def test_func(self):
+        object = self.get_object()
+        return object == self.request.user
+    
+    
 class UserRedirectMixin:
     def get_success_url(self, *args, **kwargs):
         return reverse_lazy(
@@ -40,10 +49,12 @@ class UserProfileView(UserProfileMixin, ListView):
 
     def get_queryset(self):
         user = get_object_or_404(User, username=self.kwargs.get('username'))
-        queryset = user.posts.all()
+        queryset = user.posts.all().annotate(comment_count=Count('comments')
+        ).order_by('-pub_date')
         return queryset
 
 
-class UserProfileUpdate(UserProfileMixin, UserRedirectMixin, UpdateView):
+class UserProfileUpdate(LoginRequiredMixin, OnlyAuthorMixin, UserProfileMixin,
+                        UserRedirectMixin, UpdateView):
     template_name = 'blog/user.html'
     form_class = ProfileForm

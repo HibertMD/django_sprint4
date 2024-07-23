@@ -1,4 +1,6 @@
 """Модели для блога"""
+from django.db.models import Count
+from django.db.models.functions import Coalesce
 from django.urls import reverse
 from django.utils import timezone
 
