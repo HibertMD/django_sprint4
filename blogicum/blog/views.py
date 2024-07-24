@@ -61,16 +61,10 @@ class PostDetailView(DetailView):
     def get(self, request, *args, **kwargs):
         """Возвращает опубликованные посты. Или все посты автора."""
         self.object = self.get_object()
-        if (all(
-                [
-                    self.object.is_published,
-                    self.object.pub_date <= timezone.now(),
-                    self.object.category.is_published
-                ])
-                or (
-                    self.object.author == self.request.user
-                )
-        ):
+        if (all
+            ([self.object.is_published, self.object.pub_date <= timezone.now(),
+             self.object.category.is_published])
+                or (self.object.author == self.request.user)):
             return super().get(request, *args, **kwargs)
         else:
             raise Http404
