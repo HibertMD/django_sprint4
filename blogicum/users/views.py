@@ -65,7 +65,7 @@ class UserProfileView(UserProfileMixin, ListView):
         """Добавляет посты связанные с пользователем."""
         user = get_object_or_404(User, username=self.kwargs.get('username'))
         queryset = user.posts.all().annotate(comment_count=Count('comments')
-        ).order_by('-pub_date')
+                                             ).order_by('-pub_date')
         return queryset
 
 

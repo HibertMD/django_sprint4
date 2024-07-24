@@ -15,7 +15,7 @@ from .models import Category, Comment, Post
 
 class OnlyAuthorMixin(UserPassesTestMixin):
     """Проверка авторства."""
-    
+
     def test_func(self):
         object = self.get_object()
         return object.author == self.request.user
@@ -23,11 +23,11 @@ class OnlyAuthorMixin(UserPassesTestMixin):
 
 class PostListView(ListView):
     """Представление списка постов."""
-    
+
     model = Post
     template_name = 'blog/index.html'
     paginate_by = POSTS_PER_PAGE
-    
+
     def get_queryset(self):
         """
         Возвращает опубликованные посты принадлежащие выбранной категории.
@@ -35,7 +35,6 @@ class PostListView(ListView):
         Или все опубликованные посты если категория не выбрана.
         Возвращает 404 если категория снята с публикации.
         """
-
         category_slug = self.kwargs.get('category_slug')
         if category_slug:
             category = Category.objects.filter(
@@ -58,7 +57,7 @@ class PostDetailView(DetailView):
 
     model = Post
     template_name = 'blog/detail.html'
-    
+
     def get(self, request, *args, **kwargs):
         """Возвращает опубликованные посты. Или все посты автора."""
         self.object = self.get_object()
@@ -70,7 +69,8 @@ class PostDetailView(DetailView):
                 ])
                 or (
                     self.object.author == self.request.user
-                )):
+                )
+        ):
             return super().get(request, *args, **kwargs)
         else:
             raise Http404
@@ -184,6 +184,7 @@ class CommentUpdateView(OnlyAuthorMixin, UpdateView):
 
 class CommentDeleteView(OnlyAuthorMixin, DeleteView):
     """Представление для удаления комментария."""
+
     model = Comment
     template_name = 'blog/comment.html'
 
