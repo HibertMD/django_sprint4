@@ -1,12 +1,8 @@
 """Модели для блога"""
-from django.db.models import Count
-from django.db.models.functions import Coalesce
-from django.urls import reverse
-from django.utils import timezone
-
 from django.contrib.auth import get_user_model
 from django.db import models
-
+from django.urls import reverse
+from django.utils import timezone
 
 from .constants import CHAR_FIELD_MAX_LEN
 from core.models import PublishedModel
@@ -153,6 +149,8 @@ class Post(PublishedModel):
 
 
 class Comment(models.Model):
+    """Модель комментария."""
+
     text = models.TextField('Текст комментария')
     post = models.ForeignKey(
         Post,
@@ -161,6 +159,6 @@ class Comment(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    
+
     class Meta:
         ordering = ('-created_at',)

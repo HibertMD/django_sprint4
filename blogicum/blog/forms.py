@@ -8,12 +8,15 @@ User = get_user_model()
 
 
 class PostForm(forms.ModelForm):
+    """Форма для поста."""
 
     def __init__(self, *args, **kwargs):
+        """Устанавливает текущее время в форму по-умолчанию."""
         super().__init__(*args, **kwargs)
         self.fields['pub_date'].initial = timezone.localtime(
             timezone.now()
         ).strftime('%Y-%m-%dT%H:%M')
+
     class Meta:
         model = Post
         exclude = ('is_published', 'author')
@@ -23,13 +26,16 @@ class PostForm(forms.ModelForm):
 
 
 class ProfileForm(forms.ModelForm):
+    """Форма для профиля."""
+
     class Meta:
         model = User
         fields = ('first_name', 'last_name', 'username', 'email',)
 
 
 class CommentForm(forms.ModelForm):
+    """Форма для комментария."""
+
     class Meta:
         model = Comment
         fields = ('text',)
-

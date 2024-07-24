@@ -5,9 +5,8 @@ from django.conf import settings
 
 from users import views
 
-handler403 = 'core.views.access_denied'
-handler404 = 'core.views.page_not_found'
-handler500 = 'core.views.internal_server'
+handler404 = 'pages.views.page_not_found'
+handler500 = 'pages.views.internal_server'
 
 
 urlpatterns = [

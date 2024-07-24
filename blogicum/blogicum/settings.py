@@ -38,7 +38,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'blogicum.urls'
-TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
+TEMPLATES_DIR = BASE_DIR / 'templates/'
 
 TEMPLATES = [
     {
@@ -111,4 +111,4 @@ EMAIL_FILE_PATH = BASE_DIR / 'sent_emails'
 LOGIN_REDIRECT_URL = 'blog:index'
 LOGIN_URL = 'login'
 
-CSRF_FAILURE_VIEW = 'core.views.csrf_failure'
+CSRF_FAILURE_VIEW = 'pages.views.csrf_failure'
