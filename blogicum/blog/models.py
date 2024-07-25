@@ -1,6 +1,7 @@
 """Модели для блога"""
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.db.models import Count
 from django.urls import reverse
 from django.utils import timezone
 
@@ -27,6 +28,11 @@ class PostQuerySet(models.QuerySet):
             category__is_published=True
         )
 
+    def with_annotate(self):
+        return self.annotate(
+            comment_count=Count('comments')
+        ).order_by('-pub_date')
+
 
 class PublishedPostManager(models.Manager):
     """Возвращает связанные и отфильтрованные поля"""
@@ -36,6 +42,7 @@ class PublishedPostManager(models.Manager):
             PostQuerySet(self.model)
             .with_related_data()
             .published()
+            .with_annotate()
         )
 
 
@@ -156,9 +163,22 @@ class Comment(models.Model):
         Post,
         on_delete=models.CASCADE,
         related_name='comments',
+        verbose_name='Пост'
     )
-    created_at = models.DateTimeField(auto_now_add=True)
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name='Дата публикации'
+    )
+    author = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name = 'Автор'
+    )
+
+    def __str__(self):
+        return self.text
 
     class Meta:
+        verbose_name = 'комментарий'
+        verbose_name_plural = 'Комментарии'
         ordering = ('-created_at',)

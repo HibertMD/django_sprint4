@@ -1,12 +1,19 @@
 from django.contrib import admin
 
-from .models import Post, Category, Location
+from .models import Post, Category, Location, Comment
 
 admin.site.empty_value_display = 'Не задано'
 
 
+class CommentsInline(admin.TabularInline):
+    """Отображение списка комментариев."""
+
+    fields = ('text', 'created_at', 'author')
+    readonly_fields = ('created_at',)
+    model = Comment
+
 class PostInline(admin.TabularInline):
-    """Отображение списка постов для редактирования"""
+    """Отображение списка постов."""
 
     fields = (
         'author',
@@ -24,16 +31,10 @@ class PostInline(admin.TabularInline):
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    """
-    Отображение категорий в админке
+    """Отображение категорий в админке."""
 
-    Попытался получить все посты для админки за один запрос к БД.
-    Но так и не получилось для поля 'category' в list_editable
-    тянется отдельный запрос для каждого поста.
-    """
-
-    list_select_related = ('author', 'location', 'category',)
-
+    list_select_related = ('author', 'location', 'category')
+    inlines = (CommentsInline,)
     def get_queryset(self, request):
         qs = super(PostAdmin, self).get_queryset(request)
         qs = qs.only(
@@ -69,13 +70,12 @@ class PostAdmin(admin.ModelAdmin):
     list_display_links = ('title',)
 
 
+
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     """Отображение категорий в админке"""
 
-    inlines = (
-        PostInline,
-    )
+    inlines = (PostInline,)
     list_display = (
         'title',
         'description',
@@ -102,3 +102,11 @@ class LocationAdmin(admin.ModelAdmin):
     list_editable = (
         'is_published',
     )
+
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    """Отображение комментариев в админке"""
+
+    list_display = ('text', 'created_at', 'post')
+    readonly_fields = ('created_at', 'author', 'post')

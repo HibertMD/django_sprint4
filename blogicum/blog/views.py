@@ -1,5 +1,4 @@
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.db.models import Count
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
@@ -8,17 +7,10 @@ from django.views.generic import (
     ListView, DetailView, CreateView, UpdateView, DeleteView
 )
 
+from .mixins import OnlyAuthorMixin
 from .forms import CommentForm, PostForm
 from .constants import POSTS_PER_PAGE
 from .models import Category, Comment, Post
-
-
-class OnlyAuthorMixin(UserPassesTestMixin):
-    """Проверка авторства."""
-
-    def test_func(self):
-        object = self.get_object()
-        return object.author == self.request.user
 
 
 class PostListView(ListView):
@@ -42,14 +34,10 @@ class PostListView(ListView):
                 is_published=True,
             ).first()
             if category:
-                return category.posts(manager='published').all(
-                ).annotate(comment_count=Count('comments')
-                           ).order_by('-pub_date')
+                return category.posts(manager='published').all()
             else:
                 raise Http404
-        return Post.objects.published(
-        ).annotate(comment_count=Count('comments')
-                   ).order_by('-pub_date')
+        return Post.published.all()
 
 
 class PostDetailView(DetailView):

@@ -1,40 +1,17 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count
 from django.shortcuts import get_object_or_404
-from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, ListView
 
+from blog.mixins import (
+    UserRedirectMixin, UserProfileMixin, OnlyAuthorMixin
+)
 from .forms import ProfileForm
 from blog.constants import POSTS_PER_PAGE
 
 User = get_user_model()
-
-
-class OnlyAuthorMixin(UserPassesTestMixin):
-    """Проверка авторства."""
-
-    def test_func(self):
-        object = self.get_object()
-        return object == self.request.user
-
-
-class UserRedirectMixin:
-    """Редирект пользователя после создания или редактирования профиля."""
-
-    def get_success_url(self, *args, **kwargs):
-        return reverse_lazy(
-            'users:profile', kwargs={'username': self.object.username}
-        )
-
-
-class UserProfileMixin:
-    """Миксин для профиля пользователя."""
-
-    model = User
-    slug_url_kwarg = 'username'
-    slug_field = 'username'
 
 
 class UserCreateView(UserRedirectMixin, CreateView):
@@ -69,7 +46,7 @@ class UserProfileView(UserProfileMixin, ListView):
         return queryset
 
 
-class UserProfileUpdate(LoginRequiredMixin, OnlyAuthorMixin, UserProfileMixin,
+class UserProfileUpdate(LoginRequiredMixin, UserProfileMixin,
                         UserRedirectMixin, UpdateView):
     """Представление для редактирования профиля пользователя."""
 
