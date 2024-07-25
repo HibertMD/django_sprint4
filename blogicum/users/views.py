@@ -46,9 +46,10 @@ class UserProfileView(UserProfileMixin, ListView):
         return queryset
 
 
-class UserProfileUpdate(LoginRequiredMixin, UserProfileMixin,
-                        UserRedirectMixin,
-                        UpdateView, ):
+class UserProfileUpdate(
+    OnlyAuthorMixin, LoginRequiredMixin, UserProfileMixin,
+    UserRedirectMixin, UpdateView,
+):
     """Представление для редактирования профиля пользователя."""
 
     template_name = 'blog/user.html'

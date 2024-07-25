@@ -10,6 +10,8 @@ class OnlyAuthorMixin(UserPassesTestMixin):
 
     def test_func(self):
         object = self.get_object()
+        if type(object) == User:
+            return object == self.request.user
         return object.author == self.request.user
 
 
