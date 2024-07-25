@@ -47,7 +47,8 @@ class UserProfileView(UserProfileMixin, ListView):
 
 
 class UserProfileUpdate(LoginRequiredMixin, UserProfileMixin,
-                        UserRedirectMixin, UpdateView):
+                        UserRedirectMixin,
+                        UpdateView, ):
     """Представление для редактирования профиля пользователя."""
 
     template_name = 'blog/user.html'

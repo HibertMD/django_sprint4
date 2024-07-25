@@ -12,6 +12,7 @@ class CommentsInline(admin.TabularInline):
     readonly_fields = ('created_at',)
     model = Comment
 
+
 class PostInline(admin.TabularInline):
     """Отображение списка постов."""
 
@@ -35,6 +36,7 @@ class PostAdmin(admin.ModelAdmin):
 
     list_select_related = ('author', 'location', 'category')
     inlines = (CommentsInline,)
+
     def get_queryset(self, request):
         qs = super(PostAdmin, self).get_queryset(request)
         qs = qs.only(
@@ -68,7 +70,6 @@ class PostAdmin(admin.ModelAdmin):
     search_fields = ('title',)
     list_filter = ('category', 'author', 'pub_date')
     list_display_links = ('title',)
-
 
 
 @admin.register(Category)
